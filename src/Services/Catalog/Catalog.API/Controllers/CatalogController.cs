@@ -15,9 +15,9 @@ namespace Catalog.API.Controllers
     public class CatalogController : ControllerBase
     {
         private readonly IProductRepository _repository;
-        private readonly ILogger _logger;
+        private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IProductRepository repository, ILogger logger)
+        public CatalogController(IProductRepository repository, ILogger<CatalogController> logger)
         {
             _repository = repository ?? throw new ArgumentNullException();
             _logger = logger ?? throw new ArgumentNullException();
@@ -38,7 +38,7 @@ namespace Catalog.API.Controllers
         public async Task<ActionResult<Product>> GetProductById(string id)
         {
             var product = await _repository.GetProduct(id);
-            if(product == null)
+            if (product == null)
             {
                 _logger.LogError($"Product with id: {id}, not found");
                 return NotFound();
@@ -61,8 +61,8 @@ namespace Catalog.API.Controllers
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
             await _repository.CreateProduct(product);
-            return CreatedAtRoute("GetProduct", new {id = product.Id}, product);
-        } 
+            return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
+        }
 
 
         [HttpPut]
@@ -76,7 +76,7 @@ namespace Catalog.API.Controllers
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteProductById(string id)
         {
-            return Ok(await _repository.DeleteProduct(id)); 
+            return Ok(await _repository.DeleteProduct(id));
         }
     }
 }
